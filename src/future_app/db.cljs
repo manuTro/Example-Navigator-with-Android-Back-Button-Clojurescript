@@ -8,3 +8,4 @@
 
 ;; initial state of app-db
 (def app-db {:greeting "Hello Clojure in iOS and Android!"})
+(def nav (atom #js []))

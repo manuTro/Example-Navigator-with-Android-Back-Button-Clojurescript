@@ -2,7 +2,7 @@
   (:require
    [re-frame.core :refer [reg-event-db after]]
    [clojure.spec :as s]
-   [future-app.db :as db :refer [app-db]]))
+   [future-app.db :as db :refer [app-db nav]]))
 
 ;; -- Interceptors ------------------------------------------------------------
 ;;
@@ -14,6 +14,13 @@
   (when-not (s/valid? spec db)
     (let [explain-data (s/explain-data spec db)]
       (throw (ex-info (str "Spec check after " event " failed: " explain-data) explain-data)))))
+
+(defn nav-pop []
+  (if (and @nav (> (.-length (.getCurrentRoutes @nav)) 1))
+      (.pop @nav)
+      ))
+(defn nav-push [value]
+  (.push @nav #js {:id value}))
 
 (def validate-spec
   (if goog.DEBUG
@@ -33,3 +40,15 @@
  validate-spec
  (fn [db [_ value]]
    (assoc db :greeting value)))
+
+   (reg-event-db
+     :nav-pop
+     (fn [nav [_]]
+       (nav-pop)
+       nav))
+
+ (reg-event-db
+   :nav-push
+   (fn [nav [_ value]]
+     (nav-push value)
+     nav))
