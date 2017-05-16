@@ -1,8 +1,9 @@
 (ns future-app.events
   (:require
-   [re-frame.core :refer [reg-event-db after]]
+   [re-frame.core :refer [reg-event-db after register-handler]]
    [clojure.spec :as s]
-   [future-app.db :as db :refer [app-db]]))
+   [future-app.db :as db :refer [app-db]]
+   ))
 
 ;; -- Interceptors ------------------------------------------------------------
 ;;
@@ -21,6 +22,7 @@
     []))
 
 ;; -- Handlers --------------------------------------------------------------
+(def nav (atom #js []))
 
 (reg-event-db
  :initialize-db
@@ -33,3 +35,11 @@
  validate-spec
  (fn [db [_ value]]
    (assoc db :greeting value)))
+
+; (defn nav-push []
+;  (.push nav1 #js {:id "secondpage"}))
+
+ (register-handler
+    :nav-push
+    (fn [nav [_ _]]
+      (.push nav #js {:id "secondpage"})))

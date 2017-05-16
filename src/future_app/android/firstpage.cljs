@@ -28,3 +28,4 @@
        [touchable-highlight {:style {:background-color "#999" :padding 10 :border-radius 5}
                              :on-press #(.push navigator #js {:id "secondpage"})}
         [text {:style {:color "white" :text-align "center" :font-weight "bold"}} "press me"]]])))
+  ;:on-press #(.push navigator #js {:id "secondpage"})}

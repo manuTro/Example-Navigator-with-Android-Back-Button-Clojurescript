@@ -2,6 +2,7 @@
   (:require [reagent.core :as r :refer [atom]]
             [future-app.android.firstpage :as f]
             [future-app.android.secondpage :as s]
+            [future-app.android.animation :as a]
             [re-frame.core :refer [subscribe dispatch dispatch-sync]]
             [future-app.events]
             [future-app.subs]))
@@ -36,11 +37,14 @@
 
 (defn app-root []
   [navigator {:initial-route {:id "firstpage"}
+               :configure-scene (constantly (.-HorizontalSwipeJump (.-SceneConfigs (.-Navigator ReactNative))))
               :render-scene (fn [route navigator]
                               (do (reset! nav navigator)
                               (case (.-id route)
                                 "firstpage" (r/as-element [f/FirstPage {:navigator navigator :route route}])
-                                "secondpage" (r/as-element [s/SecondPage {:navigator navigator :route route}]))))}])
+                                "secondpage" (r/as-element [s/SecondPage {:navigator navigator :route route}])
+                                "animation" (r/as-element [a/animation {:navigator navigator :route route}])
+                                )))}])
 
 (defn init []
   (dispatch-sync [:initialize-db])
